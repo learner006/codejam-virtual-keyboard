@@ -3,7 +3,15 @@ const KBKeyWidths = [
   [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1],     // Tab 14x1 Del
   [2.6,1,1,1,1,1,1,1,1,1,1,1,2.5],   // Caps 11x1 Enter
   [3.2,1,1,1,1,1,1,1,1,1,1,1,2.2],   // LShift 11x1 RShift
-  [1.7,1,1,5.5,1,1.7,1,1,1,1,1]    // LCtrl, Win, LAlt, Space, RAlt, Context menu, RCtrl, L, B, U, Fn
+  [1.7,1,1,5.5,1,1.7,1,1,1,1,1,1]    // LCtrl, Win, LAlt, Space, RAlt, Context menu, RCtrl, L, B, U, Fn
+];
+
+const KeyCodes = [
+  ['Escape', 'Backquote', 'Digit1', 'Digit2', 'Digit4', 'Digit3', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace'],
+  ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete' ],
+  ['CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
+  ['ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight'], 
+  ['ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'MetaRight', 'ContextMenu', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'FictionFnKey']
 ];
 
 const KeyCaptionEn = [
@@ -24,8 +32,8 @@ const KeyCaptionEn = [
   ['Shift', 'z',  'x',  'c',  'v',  'b',  'n',  'm',  ',', '.', '/', '^',  'Shift'],
   
   // line 5
-  ['[]',   '[]',  '[]',  '[]',    '[]',  '[]',  '[]',   '[]', '[]', '[]', '[]'],
-  ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Mnu', 'Ctrl', '<',  'v',  '>',  'Fn']
+  ['[]',   '[]',  '[]',  '[]',    '[]',  '[]',  '[]',  '[]',   '[]', '[]', '[]', '[]'],
+  ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Win', 'Mnu', 'Ctrl', '<',  'v',  '>',  'Fn']
 ];
 
 const KeyCaptionRu = [
@@ -46,8 +54,8 @@ const KeyCaptionRu = [
   ['Shift', 'ÿ',  '÷',  'ñ',  'ì',  'è',  'ò',  'ü',  'á',  'þ',  '.',  '^', 'Shift'],
   
   // line 5
-  ['[]',   '[]',  '[]',  '[]',    '[]',  '[]',  '[]',   '[]', '[]', '[]', '[]'],
-  ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Mnu', 'Ctrl', '<',  'v',  '>',  'Fn']
+  ['[]',   '[]',  '[]',  '[]',    '[]',  '[]',  '[]',  '[]',   '[]', '[]', '[]', '[]'],
+  ['Ctrl', 'Win', 'Alt', 'Space', 'Alt', 'Win', 'Mnu', 'Ctrl', '<',  'v',  '>',  'Fn']
 ];
 
 class View {
@@ -78,7 +86,8 @@ class View {
       {
         let buttonId = `${kbLine}-${j}`;
         let buttonElement = document.getElementById(buttonId);
-        buttonElement.innerHTML = KBLine[j][0];
+        //buttonElement.innerHTML = KBLine[j][0];
+        buttonElement.innerHTML = KeyCodes[kbLine][j];
       }
     }
   }
@@ -163,13 +172,56 @@ class Keyboard {
 }
 
 class Controller {
+  constructor() {
+    this.keyboard = new Keyboard();
+    this.keyboard.createKeys();
+
+    this.view = new View();
+    this.view.createButtons(this.keyboard.getButtonWidths());
+    this.view.drawCaptionsOnButtons(this.keyboard.getButtonCaptions());
+  }
 }
 
-let keyboard = new Keyboard();
-keyboard.createKeys();
+function callback()
+{
+  alert('xx');
+}
+
+function callback_keydown(p_KeyboardEvent)
+{
+  return;
+
+  let e = p_KeyboardEvent;
+
+  let str = "KeyboardEvent: key='" + event.key + "' | code='" +
+            event.code + "'";
+  let el = document.createElement("span");
+
+  //el.innerHTML = event.code + "<br/>";
+  el.innerHTML = event.code + '&nbsp;';
+ 
+//  document.getElementById("output").appendChild(el);
+  document.body.appendChild(el);
+//  alert('callback_keydown');
+  scroll(0,10000000);
+}
+
+function callback_keyup(p_KeyboardEvent)
+{
+//  alert('callback_keyup');
+}
+
+
+
+
+let controller = null;
 
 window.addEventListener("DOMContentLoaded", function () {
-  let v = new View();
-  v.createButtons(keyboard.getButtonWidths());
-  v.drawCaptionsOnButtons(keyboard.getButtonCaptions());
+  controller = new Controller();
+
+  //let e = document.getElementById('0-0');
+  //e.addEventListener('click',callback);
+  document.addEventListener('keydown',callback_keydown);
+  document.addEventListener('keydown',callback_keyup);
 });
+
