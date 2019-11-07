@@ -1,29 +1,34 @@
 class View {
   constructor() {
-    this.kbdDiv = document.createElement("div");
-    document.body.appendChild(this.kbdDiv);
+    this.kbDiv = document.createElement("div");
+    document.body.appendChild(this.kbDiv);
   }
 
   createButtons(p_Widths) {
-    for(let kbdRow = 0; kbdRow < p_Widths.length; ++kbdRow) {
+    for(let kbRow = 0; kbRow < p_Widths.length; ++kbRow) {
       const div = document.createElement("div");
-      this.kbdDiv.appendChild(div);
-      for (let col = 0; col < p_Widths[kbdRow].length; ++col) {
+      this.kbDiv.appendChild(div);
+      for (let col = 0; col < p_Widths[kbRow].length; ++col) {
         const button = document.createElement("button");
+        button.id = `${kbRow}-${col}`;
         div.appendChild(button);
       }
     }
   }
+  drawCaptionsOnButtons(p_Captions) {
+  }
+
 
 }
 
 class Keyboard {
   constructor() {
+  	this.layout = "en";
   }
 
   getButtonWidths() {
     let a = [
-      [1.7,1,1,1,1,1,1,1,1,1,1,1,1,1,1.7], // Esc 13x1 Bksp
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.7], // 14x1 Bksp
       [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1],     // Tab 14x1 Del
       [2.6,1,1,1,1,1,1,1,1,1,1,1,1,2.5],   // Caps 11x1 Enter
       [3.2,1,1,1,1,1,1,1,1,1,1,1,1,2.2],   // LShift 11x1 RShift
@@ -31,6 +36,14 @@ class Keyboard {
     ];
 
     return a;
+  }
+
+  getButtonCaptions {
+  	let en = [
+  		
+  	];
+
+  	return en
   }
 }
 
