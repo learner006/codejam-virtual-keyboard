@@ -65,6 +65,7 @@ const KeyCaptionRu = [
 class View {
   constructor() {
     this.kbDiv = document.createElement("div");
+    this.kbDiv.id = 'keyboardBox';
     document.body.appendChild(this.kbDiv);
   }
 
@@ -127,9 +128,16 @@ class Keyboard {
     this.KBLineCount = 5;
   	this.KBKeys = [];
     this.createKeys();
+    this.AnyAltPressed = false;
+    this.AnyShiftPressed = false;
     // View class
     this.view = new View();
     this.view.createButtons(this.getButtonWidths());
+  }
+
+  toggleLayout() {
+    this.layout = (this.layout == "en" ? "ru" : "en");
+    
   }
 
   createKeys() {
@@ -217,15 +225,39 @@ class Keyboard {
   // Event 'handlers'
   event_DoKeyDown(p_KeyboardEvent) {
     let e = p_KeyboardEvent;
+
     let keyCoordinate = this.getKeyCoordinatesForScanCode(e.code);
 
-    this.view.highligtElement(keyCoordinate);
+    if (keyCoordinate != '') {
+      let c = keyCoordinate.split('-');
+      this.KBKeys[c[0]][c[1]].isPressed = true;
+
+      if (this.KBKeys[4][2].isPressed && (this.KBKeys[3][0].isPressed || this.KBKeys[3][12].isPressed))
+      {
+        this.toggleLayout();
+        // Let's break an MVC pattern for a while! ;-)
+        let e = document.getElementById("KBLayout");
+        if (e !== undefined) {
+          e.selectedIndex = (1-e.selectedIndex);
+        }
+
+        this.setKeyCaptions();
+      }
+
+      
+      this.view.highligtElement(keyCoordinate);
+    }
   }
   event_DoKeyUp(p_KeyboardEvent) {
     let e = p_KeyboardEvent;
     let keyCoordinate = this.getKeyCoordinatesForScanCode(e.code);
 
-    this.view.removeHighlight(keyCoordinate);
+    if (keyCoordinate != '') {
+      let c = keyCoordinate.split('-');
+      this.KBKeys[c[0]][c[1]].isPressed = false;
+      
+      this.view.removeHighlight(keyCoordinate);
+    }
   }
 
 }
@@ -249,23 +281,11 @@ class Controller {
 
 function getDebugControlsHTML()
 {
-  return 'Keyboard layout:\
-    <select name="KBLayout" onChange="callback_KbLayoutChange(this.value)">\
+  return '<br>Keyboard layout:\
+    <select id="KBLayout" onChange="callback_KbLayoutChange(this.value)">\
     <option value="en" default>EN<br>\
     <option value="ru">RU<br>\
-    </select>\
-    \
-    Caps Lock: \
-    <select name="CapsLock" onChange="callback_CapsLockChange(this.value)">\
-    <option value="off" default>OFF<br>\
-    <option value="on">ON<br>\
-    </select>\
-    \
-    Shift:\
-    <select name="Shift" onChange="callback_ShiftChange(this.value)">\
-    <option value="false" default>NOT pressed<br>\
-    <option value="true">IS pressed<br>\
-    </select><br><br>';
+    </select> (Press Left Alt + Shift to toggle)<br><br>';
 }
 
 function createDebugControls() {
@@ -277,8 +297,11 @@ function createDebugControls() {
 
 
 function callback_KbLayoutChange(p_val) {
-  controller.keyboard.layout = p_val;
-  controller.keyboard.setKeyCaptions();
+  if (controller.keyboard.layout != p_val)
+  {
+    controller.keyboard.layout = p_val;
+    controller.keyboard.setKeyCaptions();
+  }
 }
 
 function callback_CapsLockChange(p_val) {
@@ -290,7 +313,6 @@ function callback_ShiftChange(p_val) {
 let controller = null;
 
 window.addEventListener("DOMContentLoaded", function () {
-  createDebugControls();
 
   controller = new Controller();
   controller.callback_keydown = controller.callback_keydown.bind(controller);
@@ -298,5 +320,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener('keydown',controller.callback_keydown);
   document.addEventListener('keyup',controller.callback_keyup);
+
+  createDebugControls();
 }
 );
