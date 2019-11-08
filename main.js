@@ -42,20 +42,20 @@ const KeyCaptionEn = [
 
 const KeyCaptionRu = [
   // line 1
-  ['[]',  '~', '"', 'π', ';', '%', ':', '?', '*', '(', ')', '_', '+', '[]'],
-  ['∏',   '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace'],
+  ['[]',  '~', '"', '‚Ññ', ';', '%', ':', '?', '*', '(', ')', '_', '+', '[]', '[]'],
+  ['—ë',   '`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',  'Backspace'],
   
   // line 2
   ['[]',  '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '/', '[]'],
-  ['Tab', 'È',  'ˆ',  'Û',  'Í',  'Â',  'Ì',  '„',  '¯',  '˘',  'Á',  'ı',  '˙',  '\\', 'Del'],
+  ['Tab', '–π',  '—Ü',  '—É',  '–∫',  '–µ',  '–Ω',  '–≥',  '—à',  '—â',  '–∑',  '—Ö',  '—ä',  '\\', 'Del'],
   
   // line 3
   ['[]',   '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]'],
-  ['Caps', 'Ù',  '˚',  '‚',  '‡',  'Ô',  '',  'Ó',  'Î',  '‰',  'Ê',  '˝',  'Enter'],
+  ['Caps', '—Ñ',  '—ã',  '–≤',  '–∞',  '–ø',  '—Ä',  '–æ',  '–ª',  '–¥',  '–∂',  '—ç',  'Enter'],
   
   // line 4
   ['[]',    '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', ',', '[]', '[]'],
-  ['Shift', 'ˇ',  '˜',  'Ò',  'Ï',  'Ë',  'Ú',  '¸',  '·',  '˛',  '.',  '^', 'Shift'],
+  ['Shift', '—è',  '—á',  '—Å',  '–º',  '–∏',  '—Ç',  '—å',  '–±',  '—é',  '.',  '^', 'Shift'],
   
   // line 5
   ['[]',   '[]',  '[]',  '[]',    '[]',  '[]',  '[]',  '[]',   '[]', '[]', '[]', '[]'],
@@ -75,7 +75,6 @@ class View {
       for (let col = 0; col < p_Widths[kbRow].length; ++col) {
         const button = document.createElement("button");
         button.id = `${kbRow}-${col}`;
-        button.innerHTML = p_Widths[kbRow][col];
         div.appendChild(button);
       }
     }
@@ -117,6 +116,9 @@ class Keyboard {
     this.KBLineCount = 5;
   	this.KBKeys = [];
     this.createKeys();
+    // View class
+    this.view = new View();
+    this.view.createButtons(this.getButtonWidths());
   }
 
   createKeys() {
@@ -133,7 +135,7 @@ class Keyboard {
   setKeyCaptions() {
     let KeyCaptionArr = KeyCaptionEn;
     if (this.layout == "ru")
-      KeyCaptionArr = KeyCaptionEn;
+      KeyCaptionArr = KeyCaptionRu;
 
     for(let i = 0; i < this.KBLineCount * 2; i += 2)
     {
@@ -155,6 +157,8 @@ class Keyboard {
         //say(captions);
       }
     }
+    this.view.drawCaptionsOnButtons(this.getButtonCaptions());
+
   }
 
   getButtonWidths() {
@@ -185,11 +189,8 @@ class Keyboard {
 class Controller {
   constructor() {
     this.keyboard = new Keyboard();
+    this.keyboard.layout = "ru";
     this.keyboard.setKeyCaptions();
-
-    this.view = new View();
-    this.view.createButtons(this.keyboard.getButtonWidths());
-    this.view.drawCaptionsOnButtons(this.keyboard.getButtonCaptions());
   }
 }
 
@@ -222,12 +223,55 @@ function callback_keyup(p_KeyboardEvent)
 //  alert('callback_keyup');
 }
 
+function getDebugControlsHTML()
+{
+  return
+    'Keyboard layout:\
+    <select name="KBLayout" onChange="callback_KbKayoutChange(this.value)">\
+    <option value="en" default>EN<br>\
+    <option value="ru">RU<br>\
+    </select>\
+    \
+    Caps Lock: \
+    <select name="CapsLock" onChange="callback_CapsLockChange(this.value)">\
+    <option value="off" default>OFF<br>\
+    <option value="on">ON<br>\
+    </select>\
+    \
+    Shift:\
+    <select name="Shift" onChange="callback_ShiftChange(this.value)">\
+    <option value="false" default>NOT pressed<br>\
+    <option value="true">IS pressed<br>\
+    </select>\
+    \
+    \
+    <script>\
+    function callback_KbKayoutChange(p_val) {\
+    }\
+    \
+    function callback_CapsLockChange(p_val) {\
+    }\
+    \
+    function callback_ShiftChange(p_val) {\
+    }\
+    \
+    </script>';
+  
+}
 
+function createDebugControls() {
+    let div = document.createElement("div");
+    div.innerHTML = getDebugControlsHTML();
+
+    document.body.appendChild(div);
+}
 
 
 let controller = null;
 
 window.addEventListener("DOMContentLoaded", function () {
+  createDebugControls();
+
   controller = new Controller();
 
   //let e = document.getElementById('0-0');
@@ -235,4 +279,3 @@ window.addEventListener("DOMContentLoaded", function () {
   document.addEventListener('keydown',callback_keydown);
   document.addEventListener('keydown',callback_keyup);
 });
-
