@@ -1,0 +1,269 @@
+﻿<html>
+  <head>
+    <meta charset="utf-8">
+    <title>codejam-virtual-keyboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- data-main attribute tells require.js to load
+      scripts/main.js after require.js loads. -->
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <p>←</p>
+    <p>⇐⇑⇒⇓</p>
+    <div>
+      Keyboard layout:    
+      <select name="KBLayout" onchange="callback_KbLayoutChange(this.value)">
+        <option value="en" default="">EN    </option>
+        <option value="ru">RU    </option>
+      </select>
+      Caps Lock:     
+      <select name="CapsLock" onchange="callback_CapsLockChange(this.value)">
+        <option value="off" default="">OFF    </option>
+        <option value="on">ON    </option>
+      </select>
+      Shift:    
+      <select name="Shift" onchange="callback_ShiftChange(this.value)">
+        <option value="false" default="">NOT pressed    </option>
+        <option value="true">IS pressed    </option>
+      </select>
+      <br><br>
+    </div>
+    <div id="keyboardKeys" style="text-align: center">
+      <div>
+        <button id="0-0">
+          <p class="charMain">Esc</p>
+        </button>
+        <button id="0-1">
+          <p class="charExtra">~</p>
+          <p class="charMain">`</p>
+        </button>
+        <button id="0-2">
+          <p class="charExtra">!</p>
+          <p class="charMain">1</p>
+        </button>
+        <button id="0-3">
+          <p class="charExtra">@</p>
+          <p class="charMain">2</p>
+        </button>
+        <button id="0-4">
+          <p class="charExtra">#</p>
+          <p class="charMain">3</p>
+        </button>
+        <button id="0-5">
+          <p class="charExtra">$</p>
+          <p class="charMain">4</p>
+        </button>
+        <button id="0-6">
+          <p class="charExtra">%</p>
+          <p class="charMain">5</p>
+        </button>
+        <button id="0-7">
+          <p class="charExtra">^</p>
+          <p class="charMain">6</p>
+        </button>
+        <button id="0-8">
+          <p class="charExtra">&amp;</p>
+          <p class="charMain">7</p>
+        </button>
+        <button id="0-9">
+          <p class="charExtra">*</p>
+          <p class="charMain">8</p>
+        </button>
+        <button id="0-10">
+          <p class="charExtra">(</p>
+          <p class="charMain">9</p>
+        </button>
+        <button id="0-11">
+          <p class="charExtra">)</p>
+          <p class="charMain">0</p>
+        </button>
+        <button id="0-12">
+          <p class="charExtra">_</p>
+          <p class="charMain">-</p>
+        </button>
+        <button id="0-13">
+          <p class="charExtra">+</p>
+          <p class="charMain">=</p>
+        </button>
+        <button id="0-14">
+          <p class="charMain">Backspace</p>
+        </button>
+      </div>
+      <div>
+        <button id="1-0">
+          <p class="charMain">Tab</p>
+        </button>
+        <button id="1-1">
+          <p class="charMain">q</p>
+        </button>
+        <button id="1-2">
+          <p class="charMain">w</p>
+        </button>
+        <button id="1-3">
+          <p class="charMain">e</p>
+        </button>
+        <button id="1-4">
+          <p class="charMain">r</p>
+        </button>
+        <button id="1-5">
+          <p class="charMain">t</p>
+        </button>
+        <button id="1-6">
+          <p class="charMain">y</p>
+        </button>
+        <button id="1-7">
+          <p class="charMain">u</p>
+        </button>
+        <button id="1-8">
+          <p class="charMain">i</p>
+        </button>
+        <button id="1-9">
+          <p class="charMain">o</p>
+        </button>
+        <button id="1-10">
+          <p class="charMain">p</p>
+        </button>
+        <button id="1-11">
+          <p class="charExtra">{</p>
+          <p class="charMain">[</p>
+        </button>
+        <button id="1-12">
+          <p class="charExtra">}</p>
+          <p class="charMain">]</p>
+        </button>
+        <button id="1-13">
+          <p class="charExtra">|</p>
+          <p class="charMain">\</p>
+        </button>
+        <button id="1-14">
+          <p class="charMain">Del</p>
+        </button>
+      </div>
+      <div>
+        <button id="2-0">
+          <p class="charMain">Caps</p>
+        </button>
+        <button id="2-1">
+          <p class="charMain">a</p>
+        </button>
+        <button id="2-2">
+          <p class="charMain">s</p>
+        </button>
+        <button id="2-3">
+          <p class="charMain">d</p>
+        </button>
+        <button id="2-4">
+          <p class="charMain">f</p>
+        </button>
+        <button id="2-5">
+          <p class="charMain">g</p>
+        </button>
+        <button id="2-6">
+          <p class="charMain">h</p>
+        </button>
+        <button id="2-7">
+          <p class="charMain">j</p>
+        </button>
+        <button id="2-8">
+          <p class="charMain">k</p>
+        </button>
+        <button id="2-9">
+          <p class="charMain">l</p>
+        </button>
+        <button id="2-10">
+          <p class="charExtra">:</p>
+          <p class="charMain">;</p>
+        </button>
+        <button id="2-11">
+          <p class="charExtra">"</p>
+          <p class="charMain">'</p>
+        </button>
+        <button id="2-12">
+          <p class="charMain">Enter</p>
+        </button>
+      </div>
+      <div>
+        <button id="3-0">
+          <p class="charMain">Shift</p>
+        </button>
+        <button id="3-1">
+          <p class="charMain">z</p>
+        </button>
+        <button id="3-2">
+          <p class="charMain">x</p>
+        </button>
+        <button id="3-3">
+          <p class="charMain">c</p>
+        </button>
+        <button id="3-4">
+          <p class="charMain">v</p>
+        </button>
+        <button id="3-5">
+          <p class="charMain">b</p>
+        </button>
+        <button id="3-6">
+          <p class="charMain">n</p>
+        </button>
+        <button id="3-7">
+          <p class="charMain">m</p>
+        </button>
+        <button id="3-8">
+          <p class="charExtra">&lt;</p>
+          <p class="charMain">,</p>
+        </button>
+        <button id="3-9">
+          <p class="charExtra">&gt;</p>
+          <p class="charMain">.</p>
+        </button>
+        <button id="3-10">
+          <p class="charExtra">?</p>
+          <p class="charMain">/</p>
+        </button>
+        <button id="3-11">
+          <p class="charMain">^</p>
+        </button>
+        <button id="3-12">
+          <p class="charMain">Shift</p>
+        </button>
+      </div>
+      <div>
+        <button id="4-0">
+          <p class="charMain">Ctrl</p>
+        </button>
+        <button id="4-1">
+          <p class="charMain">Win</p>
+        </button>
+        <button id="4-2">
+          <p class="charMain">Alt</p>
+        </button>
+        <button id="4-3">
+          <p class="charMain">Space</p>
+        </button>
+        <button id="4-4">
+          <p class="charMain">Alt</p>
+        </button>
+        <button id="4-5">
+          <p class="charMain">Win</p>
+        </button>
+        <button id="4-6">
+          <p class="charMain">Mnu</p>
+        </button>
+        <button id="4-7">
+          <p class="charMain">Ctrl</p>
+        </button>
+        <button id="4-8">
+          <p class="charMain">&lt;</p>
+        </button>
+        <button id="4-9">
+          <p class="charMain">v</p>
+        </button>
+        <button id="4-10">
+          <p class="charMain">&gt;</p>
+        </button>
+        <button id="4-11">
+          <p class="charMain">Fn</p>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

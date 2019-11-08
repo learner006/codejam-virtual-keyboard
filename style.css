@@ -1,0 +1,17 @@
+body {
+  background-color: #C8C8C8;
+  color: white;
+  text-align: center;
+}
+
+.highlighted {
+  background-color: white;
+}
+
+#keyboardBox {
+  margin-top: 20%;
+  text-align: center;
+}
+#keyboardBox button {
+    font-size: 1.2em;
+}

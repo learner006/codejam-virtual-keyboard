@@ -1,0 +1,22 @@
+body {
+  background-color: #C8C8C8;
+  color: white;
+}
+
+.highlighted {
+  background-color: white;
+}
+
+
+#keyboardKeys {
+  border: 2px solid green;
+  margin: 0px auto;
+}
+
+#keyboardKeys div {
+  border: 2px solid green;
+}
+
+#keyboardKeys button {
+  background-color: white;
+}
