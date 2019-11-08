@@ -107,16 +107,17 @@ class View {
 }
 
 class KBKey {
-	constructor(p_width=1, p_caption=[]) {
+	constructor(p_scanCode, p_width=1) {
 	/*
 		this.caption = ['Esc'];
 		this.caption = ['3','#']; // for example
 		//this.charToOutput = '#';
 		this.hasCharToOutput = true;
 	*/
-		this.caption = p_caption
 		this.isPressed = false;
-		this.width = 2.5;
+    this.scanCode = p_scanCode;
+		this.width = p_width;
+
 	}
 }
 
@@ -135,8 +136,9 @@ class Keyboard {
     for(let keyRow = 0; keyRow < KBKeyWidths.length; ++keyRow) {
       let kbLine = [];
       for(let j = 0; j < KBKeyWidths[keyRow].length; ++j) {
+        let scanCode = KeyCodes[keyRow][j];
         let width = KBKeyWidths[keyRow][j];
-        kbLine.push(new KBKey(width));
+        kbLine.push(new KBKey(scanCode,width));
       }
       this.KBKeys.push(kbLine);
     }
@@ -195,12 +197,35 @@ class Keyboard {
     return out_captionsArr;
   }
 
+  getKeyCoordinatesForScanCode(p_scanCode) {
+    let out_keyCoordinates = '';
+
+    label_OUTER_LOOP:
+    for(let kbLine = 0; kbLine < this.KBLineCount; ++kbLine)
+      for (let j = 0; j < this.KBKeys[kbLine].length; ++j)
+      {
+        if (p_scanCode == this.KBKeys[kbLine][j].scanCode)
+        {
+          out_keyCoordinates = `${kbLine}-${j}`;
+          break label_OUTER_LOOP;
+        }
+      }
+
+    return out_keyCoordinates;
+  }
+
   // Event 'handlers'
   event_DoKeyDown(p_KeyboardEvent) {
-    this.view.highligtElement('0-0');
+    let e = p_KeyboardEvent;
+    let keyCoordinate = this.getKeyCoordinatesForScanCode(e.code);
+
+    this.view.highligtElement(keyCoordinate);
   }
   event_DoKeyUp(p_KeyboardEvent) {
-    this.view.removeHighlight('0-0');
+    let e = p_KeyboardEvent;
+    let keyCoordinate = this.getKeyCoordinatesForScanCode(e.code);
+
+    this.view.removeHighlight(keyCoordinate);
   }
 
 }
