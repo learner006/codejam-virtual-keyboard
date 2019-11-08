@@ -192,35 +192,14 @@ class Controller {
     this.keyboard.layout = "en";
     this.keyboard.setKeyCaptions();
   }
-}
 
-function callback()
-{
-  alert('xx');
-}
+  callback_keydown(p_KeyboardEvent) {
+    alert('xx');
+  }
 
-function callback_keydown(p_KeyboardEvent)
-{
-  return;
+  callback_keyup(p_KeyboardEvent) {
+  }
 
-  let e = p_KeyboardEvent;
-
-  let str = "KeyboardEvent: key='" + event.key + "' | code='" +
-            event.code + "'";
-  let el = document.createElement("span");
-
-  //el.innerHTML = event.code + "<br/>";
-  el.innerHTML = event.code + '&nbsp;';
- 
-//  document.getElementById("output").appendChild(el);
-  document.body.appendChild(el);
-//  alert('callback_keydown');
-  scroll(0,10000000);
-}
-
-function callback_keyup(p_KeyboardEvent)
-{
-//  alert('callback_keyup');
 }
 
 function getDebugControlsHTML()
@@ -269,9 +248,10 @@ window.addEventListener("DOMContentLoaded", function () {
   createDebugControls();
 
   controller = new Controller();
+  controller.callback_keydown = controller.callback_keydown.bind(controller);
+  controller.callback_keyup = controller.callback_keyup.bind(controller);
 
-  //let e = document.getElementById('0-0');
-  //e.addEventListener('click',callback);
-  document.addEventListener('keydown',callback_keydown);
-  document.addEventListener('keydown',callback_keyup);
-});
+  document.addEventListener('keydown',controller.callback_keydown);
+  document.addEventListener('keyup',controller.callback_keyup);
+}
+);
