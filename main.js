@@ -1,3 +1,7 @@
+function say(p_text) {
+	console.log(p_text);
+}
+
 const KBKeyWidths = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1.7], // Esc 14x1 Bksp
   [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1],     // Tab 14x1 Del
@@ -86,15 +90,15 @@ class View {
       {
         let buttonId = `${kbLine}-${j}`;
         let buttonElement = document.getElementById(buttonId);
-        //buttonElement.innerHTML = KBLine[j][0];
-        buttonElement.innerHTML = KeyCodes[kbLine][j];
+        buttonElement.innerHTML = KBLine[j][0];
+        //buttonElement.innerHTML = KeyCodes[kbLine][j];
       }
     }
   }
 }
 
 class KBKey {
-	constructor(p_caption, p_width=1) {
+	constructor(p_width=1, p_caption=[]) {
 	/*
 		this.caption = ['Esc'];
 		this.caption = ['3','#']; // for example
@@ -112,19 +116,34 @@ class Keyboard {
   	this.layout = "en";
     this.KBLineCount = 5;
   	this.KBKeys = [];
+    this.createKeys();
   }
 
   createKeys() {
+    for(let keyRow = 0; keyRow < KBKeyWidths.length; ++keyRow) {
+      let kbLine = [];
+      for(let j = 0; j < KBKeyWidths[keyRow].length; ++j) {
+        let width = KBKeyWidths[keyRow][j];
+        kbLine.push(new KBKey(width));
+      }
+      this.KBKeys.push(kbLine);
+    }
+  }
+
+  setKeyCaptions() {
+    let KeyCaptionArr = KeyCaptionEn;
+    if (this.layout == "ru")
+      KeyCaptionArr = KeyCaptionEn;
+
     for(let i = 0; i < this.KBLineCount * 2; i += 2)
     {
-      let kbLine = [];
       // traverse the keys
-      for(let j = 0; j < KeyCaptionEn[i].length; ++j)
+      for(let j = 0; j < KeyCaptionArr[i].length; ++j)
       {
         let captions = [];
 
-        let captionUpper = KeyCaptionEn[i][j];
-        let captionBottom = KeyCaptionEn[i+1][j];
+        let captionUpper = KeyCaptionArr[i][j];
+        let captionBottom = KeyCaptionArr[i+1][j];
 
         captions.push(captionBottom);
 
@@ -132,17 +151,9 @@ class Keyboard {
         if (captionUpper != '[]')
           captions.push(captionUpper);
 
-        // Let's get the width
-        let width = KBKeyWidths[i/2][j];
-
-        kbLine.push(new KBKey(captions,width));
+        this.KBKeys[i/2][j].caption = captions;
+        //say(captions);
       }
-
-      this.KBKeys.push(kbLine);
-
-      //say(KeyCaptionEn[i].join('-'));
-      //say(KeyCaptionEn[i+1].join('-'));
-
     }
   }
 
@@ -174,7 +185,7 @@ class Keyboard {
 class Controller {
   constructor() {
     this.keyboard = new Keyboard();
-    this.keyboard.createKeys();
+    this.keyboard.setKeyCaptions();
 
     this.view = new View();
     this.view.createButtons(this.keyboard.getButtonWidths());
