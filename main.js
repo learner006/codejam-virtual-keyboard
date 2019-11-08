@@ -189,7 +189,7 @@ class Keyboard {
 class Controller {
   constructor() {
     this.keyboard = new Keyboard();
-    this.keyboard.layout = "ru";
+    this.keyboard.layout = "en";
     this.keyboard.setKeyCaptions();
   }
 }
@@ -225,9 +225,8 @@ function callback_keyup(p_KeyboardEvent)
 
 function getDebugControlsHTML()
 {
-  return
-    'Keyboard layout:\
-    <select name="KBLayout" onChange="callback_KbKayoutChange(this.value)">\
+  return 'Keyboard layout:\
+    <select name="KBLayout" onChange="callback_KbLayoutChange(this.value)">\
     <option value="en" default>EN<br>\
     <option value="ru">RU<br>\
     </select>\
@@ -242,21 +241,7 @@ function getDebugControlsHTML()
     <select name="Shift" onChange="callback_ShiftChange(this.value)">\
     <option value="false" default>NOT pressed<br>\
     <option value="true">IS pressed<br>\
-    </select>\
-    \
-    \
-    <script>\
-    function callback_KbKayoutChange(p_val) {\
-    }\
-    \
-    function callback_CapsLockChange(p_val) {\
-    }\
-    \
-    function callback_ShiftChange(p_val) {\
-    }\
-    \
-    </script>';
-  
+    </select><br><br>';
 }
 
 function createDebugControls() {
@@ -266,6 +251,17 @@ function createDebugControls() {
     document.body.appendChild(div);
 }
 
+
+function callback_KbLayoutChange(p_val) {
+  controller.keyboard.layout = p_val;
+  controller.keyboard.setKeyCaptions();
+}
+
+function callback_CapsLockChange(p_val) {
+}
+
+function callback_ShiftChange(p_val) {
+}
 
 let controller = null;
 
