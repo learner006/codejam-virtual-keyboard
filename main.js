@@ -94,6 +94,16 @@ class View {
       }
     }
   }
+
+  highligtElement(p_DOM_Id) {
+    let el = document.getElementById(p_DOM_Id);
+    el.classList.add('highlighted');
+  }
+
+  removeHighlight(p_DOM_Id) {
+    let el = document.getElementById(p_DOM_Id);
+    el.classList.remove('highlighted');
+  }
 }
 
 class KBKey {
@@ -184,6 +194,15 @@ class Keyboard {
 
     return out_captionsArr;
   }
+
+  // Event 'handlers'
+  event_DoKeyDown(p_KeyboardEvent) {
+    this.view.highligtElement('0-0');
+  }
+  event_DoKeyUp(p_KeyboardEvent) {
+    this.view.removeHighlight('0-0');
+  }
+
 }
 
 class Controller {
@@ -194,10 +213,11 @@ class Controller {
   }
 
   callback_keydown(p_KeyboardEvent) {
-    alert('xx');
+    this.keyboard.event_DoKeyDown(p_KeyboardEvent);
   }
 
   callback_keyup(p_KeyboardEvent) {
+    this.keyboard.event_DoKeyUp(p_KeyboardEvent);
   }
 
 }

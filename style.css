@@ -2,3 +2,9 @@ body {
   background-color: #C8C8C8;
   color: white;
 }
+
+.highlighted {
+  background-color: white;
+}
+
+
